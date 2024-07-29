@@ -1,4 +1,4 @@
-{
+  {
     "name": "com.orikome.utils",
     "version": "1.0.0",
     "displayName": "OrikomeUtils",
@@ -15,7 +15,8 @@
       "transitions",
       "layer mask"
     ],
-    "dependencies": {},
+    "dependencies": {
+      "com.unity.textmeshpro": "3.0.9"
+    },
     "license": "MIT"
   }
-  
