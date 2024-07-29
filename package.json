@@ -1,0 +1,21 @@
+{
+    "name": "com.orikome.utils",
+    "version": "1.0.0",
+    "displayName": "OrikomeUtils",
+    "description": "A collection of utility scripts for Unity.",
+    "unity": "2022.3.36f1",
+    "author": {
+      "name": "orikome",
+      "url": "https://github.com/orikome/OrikomeUtils"
+    },
+    "keywords": [
+      "unity",
+      "utils",
+      "utility",
+      "transitions",
+      "layer mask"
+    ],
+    "dependencies": {},
+    "license": "MIT"
+  }
+  
