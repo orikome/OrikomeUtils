@@ -81,7 +81,7 @@ namespace OrikomeUtils
             float elapsedTime = 0f;
             while (elapsedTime < duration)
             {
-                elapsedTime += Time.deltaTime;
+                elapsedTime += Time.unscaledDeltaTime;
                 float t = Mathf.Clamp01(elapsedTime / duration);
                 objectToSlide.position = Vector3.Lerp(startPosition, endPosition, t);
                 yield return null;
