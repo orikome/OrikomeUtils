@@ -16,7 +16,8 @@ namespace OrikomeUtils
             float transitionTime,
             float startValue,
             float endValue,
-            Action callback = null
+            Action callback = null,
+            AnimationCurve curve = null
         )
         {
             float elapsed = 0;
@@ -25,7 +26,10 @@ namespace OrikomeUtils
             while (elapsed < transitionTime)
             {
                 elapsed += Time.unscaledDeltaTime;
-                float change = Mathf.Lerp(startValue, endValue, elapsed / transitionTime);
+                float normalizedTime = elapsed / transitionTime;
+                float t = curve != null ? curve.Evaluate(normalizedTime) : normalizedTime;
+                float change = Mathf.Lerp(startValue, endValue, t);
+
                 foreach (Image img in images)
                 {
                     Color tmpColor = img.color;
@@ -52,15 +56,17 @@ namespace OrikomeUtils
             float transitionTime,
             Vector3 startSize,
             Vector3 endSize,
-            Action callback = null
+            Action callback = null,
+            AnimationCurve curve = null
         )
         {
             float elapsed = 0;
             while (elapsed < transitionTime)
             {
                 elapsed += Time.unscaledDeltaTime;
-                float change = Mathf.Lerp(startSize.x, endSize.x, elapsed / transitionTime);
-                trans.localScale = Vector3.one * change;
+                float normalizedTime = elapsed / transitionTime;
+                float t = curve != null ? curve.Evaluate(normalizedTime) : normalizedTime;
+                trans.localScale = Vector3.Lerp(startSize, endSize, t);
                 yield return null;
             }
 
@@ -72,7 +78,8 @@ namespace OrikomeUtils
             Transform objectToSlide,
             Vector3 direction,
             float duration,
-            Action callback = null
+            Action callback = null,
+            AnimationCurve curve = null
         )
         {
             Vector3 startPosition = objectToSlide.position;
@@ -82,7 +89,8 @@ namespace OrikomeUtils
             while (elapsedTime < duration)
             {
                 elapsedTime += Time.unscaledDeltaTime;
-                float t = Mathf.Clamp01(elapsedTime / duration);
+                float normalizedTime = Mathf.Clamp01(elapsedTime / duration);
+                float t = curve != null ? curve.Evaluate(normalizedTime) : normalizedTime;
                 objectToSlide.position = Vector3.Lerp(startPosition, endPosition, t);
                 yield return null;
             }
@@ -95,7 +103,8 @@ namespace OrikomeUtils
         public static IEnumerator LightTransition(
             Light light,
             Color targetColor,
-            float transitionDuration
+            float transitionDuration,
+            AnimationCurve curve = null
         )
         {
             Color startColor = light.color;
@@ -103,8 +112,9 @@ namespace OrikomeUtils
 
             while (elapsedTime < transitionDuration)
             {
-                elapsedTime += Time.deltaTime;
-                float t = elapsedTime / transitionDuration;
+                elapsedTime += Time.unscaledDeltaTime;
+                float normalizedTime = Mathf.Clamp01(elapsedTime / transitionDuration);
+                float t = curve != null ? curve.Evaluate(normalizedTime) : normalizedTime;
                 light.color = Color.Lerp(startColor, targetColor, t);
                 yield return null;
             }
@@ -113,7 +123,8 @@ namespace OrikomeUtils
         public static IEnumerator LightTransition(
             Light light,
             string hexColor,
-            float transitionDuration
+            float transitionDuration,
+            AnimationCurve curve = null
         )
         {
             if (ColorUtility.TryParseHtmlString(hexColor, out Color targetColor))
@@ -123,8 +134,9 @@ namespace OrikomeUtils
 
                 while (elapsedTime < transitionDuration)
                 {
-                    elapsedTime += Time.deltaTime;
-                    float t = elapsedTime / transitionDuration;
+                    elapsedTime += Time.unscaledDeltaTime;
+                    float normalizedTime = Mathf.Clamp01(elapsedTime / transitionDuration);
+                    float t = curve != null ? curve.Evaluate(normalizedTime) : normalizedTime;
                     light.color = Color.Lerp(startColor, targetColor, t);
                     yield return null;
                 }
