@@ -11,6 +11,13 @@ namespace OrikomeUtils
         /// <summary>
         /// Fades the color alpha values of each TextMeshProUGUI and Image component found in the children of the transform.
         /// </summary>
+        /// <param name="trans">The Transform containing the components to fade.</param>
+        /// <param name="transitionTime">The duration of the fade transition in seconds.</param>
+        /// <param name="startValue">The starting alpha value (0-1).</param>
+        /// <param name="endValue">The ending alpha value (0-1).</param>
+        /// <param name="callback">Optional callback action to invoke when transition completes.</param>
+        /// <param name="curve">Optional animation curve to apply to the transition. Uses linear interpolation if null.</param>
+        /// <returns>An IEnumerator for use with StartCoroutine.</returns>
         public static IEnumerator FadeTransition(
             Transform trans,
             float transitionTime,
@@ -51,6 +58,13 @@ namespace OrikomeUtils
         /// <summary>
         /// Scales the transform over a certain period of time.
         /// </summary>
+        /// <param name="trans">The Transform to scale.</param>
+        /// <param name="transitionTime">The duration of the scaling transition in seconds.</param>
+        /// <param name="startSize">The starting scale vector.</param>
+        /// <param name="endSize">The target scale vector.</param>
+        /// <param name="callback">Optional callback action to invoke when transition completes.</param>
+        /// <param name="curve">Optional animation curve to apply to the transition. Uses linear interpolation if null.</param>
+        /// <returns>An IEnumerator for use with StartCoroutine.</returns>
         public static IEnumerator ZoomTransition(
             Transform trans,
             float transitionTime,
@@ -74,6 +88,15 @@ namespace OrikomeUtils
             callback?.Invoke();
         }
 
+        /// <summary>
+        /// Slides a Transform in a specified direction over time.
+        /// </summary>
+        /// <param name="objectToSlide">The Transform to slide.</param>
+        /// <param name="direction">The direction and distance vector to slide.</param>
+        /// <param name="duration">The duration of the slide transition in seconds.</param>
+        /// <param name="callback">Optional callback action to invoke when transition completes.</param>
+        /// <param name="curve">Optional animation curve to apply to the transition. Uses linear interpolation if null.</param>
+        /// <returns>An IEnumerator for use with StartCoroutine.</returns>
         public static IEnumerator SlideTransition(
             Transform objectToSlide,
             Vector3 direction,
@@ -100,6 +123,15 @@ namespace OrikomeUtils
         }
 
         #region LightTransition
+
+        /// <summary>
+        /// Transitions a light's color to a target color over time.
+        /// </summary>
+        /// <param name="light">The Light component to modify.</param>
+        /// <param name="targetColor">The target Color to transition to.</param>
+        /// <param name="transitionDuration">The duration of the transition in seconds.</param>
+        /// <param name="curve">Optional animation curve to apply to the transition. Uses linear interpolation if null.</param>
+        /// <returns>An IEnumerator for use with StartCoroutine.</returns>
         public static IEnumerator LightTransition(
             Light light,
             Color targetColor,
@@ -120,6 +152,14 @@ namespace OrikomeUtils
             }
         }
 
+        /// <summary>
+        /// Transitions a light's color to a target color specified by a hex string over time.
+        /// </summary>
+        /// <param name="light">The Light component to modify.</param>
+        /// <param name="hexColor">The target color as a hex string (e.g., "#FF0000" for red).</param>
+        /// <param name="transitionDuration">The duration of the transition in seconds.</param>
+        /// <param name="curve">Optional animation curve to apply to the transition. Uses linear interpolation if null.</param>
+        /// <returns>An IEnumerator for use with StartCoroutine.</returns>
         public static IEnumerator LightTransition(
             Light light,
             string hexColor,
@@ -152,6 +192,11 @@ namespace OrikomeUtils
 
     public static class LayerMaskUtils
     {
+        /// <summary>
+        /// Creates a LayerMask from one or more layer names.
+        /// </summary>
+        /// <param name="layerNames">Array of layer names to include in the mask.</param>
+        /// <returns>A LayerMask containing the specified layers.</returns>
         public static LayerMask CreateMask(params string[] layerNames)
         {
             // Selectively ignore objects when casting a ray.
@@ -174,6 +219,12 @@ namespace OrikomeUtils
             return layerMask;
         }
 
+        /// <summary>
+        /// Checks if a layer is included in a LayerMask.
+        /// </summary>
+        /// <param name="layer">The layer index to check.</param>
+        /// <param name="mask">The LayerMask to check against.</param>
+        /// <returns>True if the layer is in the mask; otherwise, false.</returns>
         public static bool IsLayerInMask(int layer, LayerMask mask)
         {
             return (mask.value & (1 << layer)) != 0;
@@ -216,7 +267,7 @@ namespace OrikomeUtils
         /// </summary>
         /// <param name="center">Center point of the circle.</param>
         /// <param name="radius">Radius of the circle.</param>
-        /// <param name="yHeight">Optional Y-axis height. Default is 0.</param>
+        /// <param name="yHeight">Y-axis height of the resulting position. Default is 0.</param>
         /// <returns>A Vector3 representing the random position.</returns>
         public static Vector3 GetRandomPositionInCircle(
             Vector3 center,
@@ -230,6 +281,14 @@ namespace OrikomeUtils
             return position;
         }
 
+        /// <summary>
+        /// Returns a position that is offset from the given transform's position.
+        /// </summary>
+        /// <param name="transform">The reference transform.</param>
+        /// <param name="xOffset">The offset on the X axis. Default is 0.</param>
+        /// <param name="yOffset">The offset on the Y axis. Default is 0.</param>
+        /// <param name="zOffset">The offset on the Z axis. Default is 0.</param>
+        /// <returns>A Vector3 representing the offset position.</returns>
         public static Vector3 GetPositionWithOffset(
             Transform transform,
             float xOffset = 0,
@@ -243,6 +302,10 @@ namespace OrikomeUtils
         /// <summary>
         /// Generates a random point outside the camera's frustum, with an optional offset.
         /// </summary>
+        /// <param name="targetPos">The transform to use as a reference point.</param>
+        /// <param name="cam">The camera whose frustum to avoid.</param>
+        /// <param name="offsetDistance">Optional additional distance from the frustum edge. Default is 0.</param>
+        /// <returns>A Vector3 representing a random position outside the camera's view. Returns Vector3.zero if no suitable position is found after 10 attempts.</returns>
         public static Vector3 GetRandomPositionOutsideFrustum(
             Transform targetPos,
             Camera cam,
